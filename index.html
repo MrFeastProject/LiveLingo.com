@@ -2,8 +2,12 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>LiveLingo | Roblox Концерты</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>LiveLingo | Неон Roblox Концерты</title>
+    
+    <!-- ИКОНКА САЙТА (из вашего релиза) -->
+    <link rel="icon" type="image/jpeg" href="https://github.com/MrFeastProject/LiveLingo.com/releases/download/tag-v1/Avatar.jpg">
+    <link rel="apple-touch-icon" href="https://github.com/MrFeastProject/LiveLingo.com/releases/download/tag-v1/Avatar.jpg">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,16 +23,21 @@
             box-sizing: border-box;
         }
 
+        /* Полный экран на всех устройствах */
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+        }
+
         body {
-            background-color: black;
+            background-color: #000000;
             font-family: 'Inter', sans-serif;
             color: #e0f2fe;
             overflow-x: hidden;
             position: relative;
-            min-height: 100vh;
         }
 
-        /* Анимированные неоновые синие круги */
+        /* Анимированные неоновые синие круги (фон) */
         .neon-bg {
             position: fixed;
             top: 0;
@@ -42,9 +51,9 @@
 
         .floating-circle {
             position: absolute;
-            background: radial-gradient(circle, rgba(0, 200, 255, 0.6), rgba(0, 100, 255, 0.2));
+            background: radial-gradient(circle, rgba(0, 200, 255, 0.5), rgba(0, 100, 255, 0.15));
             border-radius: 50%;
-            filter: blur(3px);
+            filter: blur(4px);
             box-shadow: 0 0 20px #00ccff, 0 0 40px #0066ff;
             animation: floatMove linear infinite;
             pointer-events: none;
@@ -59,6 +68,7 @@
             }
         }
 
+        /* Основной контент */
         .content {
             position: relative;
             z-index: 2;
@@ -67,14 +77,15 @@
             padding: 2rem 1.5rem 5rem;
         }
 
+        /* Заголовок LiveLingo */
         .hero-title {
             text-align: center;
-            margin: 1rem 0 1.2rem;
+            margin: 0.5rem 0 1rem;
         }
-        
+
         .neon-grad-text {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(3.2rem, 12vw, 6rem);
+            font-size: clamp(2.8rem, 10vw, 6rem);
             font-weight: 900;
             background: linear-gradient(135deg, #0af, #00e0ff, #1e88e5, #0af);
             background-size: 300% 300%;
@@ -84,58 +95,61 @@
             text-shadow: 0 0 8px #00a6ff, 0 0 18px #006eff;
             animation: gradientShift 5s ease infinite, neonPulse 1.8s infinite alternate;
         }
-        
+
         @keyframes gradientShift {
             0% { background-position: 0% 50%;}
             50% { background-position: 100% 50%;}
             100% { background-position: 0% 50%;}
         }
-        
+
         @keyframes neonPulse {
             0% { text-shadow: 0 0 2px #0af, 0 0 8px #006eff; }
             100% { text-shadow: 0 0 14px #0af, 0 0 28px #0088ff, 0 0 40px #003cff; }
         }
 
+        /* Приветственный текст */
         .welcome-text {
             text-align: center;
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 4vw, 1.3rem);
             font-weight: 500;
             background: rgba(0, 20, 40, 0.65);
-            backdrop-filter: blur(3px);
-            padding: 1rem 2rem;
+            backdrop-filter: blur(5px);
+            padding: 0.8rem 1.5rem;
             border-radius: 60px;
             display: inline-block;
             width: auto;
-            margin: 0 auto 3rem auto;
+            margin: 0 auto 2rem auto;
             border: 1px solid #0af;
             box-shadow: 0 0 12px #0af;
         }
 
+        /* Универсальные контейнеры */
         .container {
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(5px);
-            border-radius: 40px;
-            padding: 1.8rem;
-            margin-bottom: 3rem;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+            border-radius: 32px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
             border: 1px solid #00a6ff;
             box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
         }
 
         .section-title {
-            font-size: 2rem;
+            font-size: clamp(1.4rem, 5vw, 2rem);
             font-weight: 800;
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
             border-left: 6px solid #0af;
             padding-left: 20px;
             text-shadow: 0 0 5px #0af;
         }
 
+        /* Видео */
         .video-wrapper {
             display: flex;
             justify-content: center;
-            margin: 1rem 0;
+            margin: 0.5rem 0;
         }
-        
+
         .neon-video {
             max-width: 100%;
             width: 100%;
@@ -146,25 +160,27 @@
             cursor: pointer;
             transition: transform 0.2s;
         }
-        
+
         .neon-video:hover {
             transform: scale(1.01);
             box-shadow: 0 0 40px #0af;
         }
-        
+
         .video-caption {
             text-align: center;
             margin-top: 12px;
             font-weight: 500;
             color: #9bd9ff;
+            font-size: clamp(0.8rem, 3vw, 1rem);
         }
-        
+
+        /* Команда */
         .team-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 1rem;
         }
-        
+
         .team-card {
             background: #05161f80;
             backdrop-filter: blur(4px);
@@ -175,12 +191,12 @@
             transition: all 0.2s;
             font-weight: 600;
         }
-        
+
         .team-card i {
             color: #0af;
             margin-right: 8px;
         }
-        
+
         .team-card:hover {
             transform: translateY(-4px);
             background: #062c3b;
@@ -188,18 +204,18 @@
             box-shadow: 0 0 20px cyan;
         }
 
-        /* Стили для отзывов */
+        /* Отзывы */
         .reviews-grid {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.2rem;
         }
-        
+
         .review-card {
             background: #0a1428aa;
             backdrop-filter: blur(8px);
             border-radius: 28px;
-            padding: 1.5rem;
+            padding: 1.2rem;
             border-left: 8px solid #0af;
             border-right: 1px solid #0af;
             border-top: 1px solid #0af;
@@ -207,122 +223,121 @@
             box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
             transition: all 0.3s ease;
         }
-        
+
         .review-card:hover {
             transform: translateX(8px);
             box-shadow: 0 0 25px #0af;
             border-left: 8px solid cyan;
         }
-        
+
         .review-header {
             display: flex;
             align-items: baseline;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
             padding-bottom: 0.5rem;
             border-bottom: 1px dashed #0af;
         }
-        
+
         .review-name {
-            font-size: 1.2rem;
+            font-size: clamp(0.95rem, 4vw, 1.1rem);
             font-weight: 700;
             color: #0af;
             text-shadow: 0 0 4px cyan;
-            word-break: break-all;
         }
-        
+
         .review-id {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: #7ec8ff;
             background: #0a1a28;
             padding: 0.2rem 0.6rem;
             border-radius: 20px;
         }
-        
+
         .review-lang {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             background: #1e3a5f;
             padding: 0.2rem 0.6rem;
             border-radius: 20px;
         }
-        
+
         .review-text {
-            font-size: 1rem;
+            font-size: clamp(0.85rem, 3.5vw, 0.95rem);
             line-height: 1.5;
             color: #e0f2fe;
-            margin-top: 0.8rem;
-            white-space: pre-wrap;
-            word-break: break-word;
+            margin-top: 0.5rem;
         }
-        
+
         .review-text i {
             color: #0af;
             margin-right: 6px;
         }
-        
+
+        /* Кнопки */
         .buttons-group {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 1.8rem;
-            margin: 2rem 0 2rem;
+            gap: 1.2rem;
+            margin: 1.5rem 0 1.5rem;
         }
-        
+
         .neon-btn {
-            background: transparent;
+            background: #02121d99;
             border: 2px solid #0af;
             color: #0af;
             font-weight: bold;
-            font-size: 1.2rem;
-            padding: 12px 28px;
+            font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+            padding: 10px 22px;
             border-radius: 60px;
             cursor: pointer;
             transition: 0.25s;
             backdrop-filter: blur(10px);
             box-shadow: 0 0 12px #0af;
-            font-family: 'Inter', sans-serif;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            background: #02121d99;
-            text-decoration: none;
+            gap: 8px;
         }
-        
+
         .neon-btn:hover {
             background: #0af;
             color: black;
             box-shadow: 0 0 28px cyan;
-            border-color: cyan;
             transform: scale(1.02);
         }
-        
+
+        /* Виджет */
         .widget-closed {
             background: #0a1a28;
             text-align: center;
-            padding: 1.2rem;
+            padding: 1rem;
             border-radius: 50px;
             width: fit-content;
             margin: 1rem auto;
             border: 1px dashed #f0f;
             box-shadow: 0 0 12px #f0a;
             font-weight: 800;
-            font-size: 1.4rem;
+            font-size: clamp(1rem, 4vw, 1.3rem);
         }
-        
+
         .widget-closed i {
-            margin-right: 12px;
+            margin-right: 10px;
             color: #ff44cc;
         }
-        
+
+        /* Подвал */
         .info-footer {
-            margin-top: 2.5rem;
+            margin-top: 2rem;
             text-align: center;
             padding: 1rem;
             border-top: 1px solid #0af;
             color: #7ec8ff;
+            font-size: clamp(0.8rem, 3vw, 0.9rem);
         }
-        
+
+        /* Скроллбар */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -333,12 +348,26 @@
             background: #0af;
             border-radius: 10px;
         }
-        
-        @media (max-width: 700px) {
-            .content { padding: 1rem; }
-            .neon-btn { font-size: 1rem; padding: 8px 20px; }
-            .team-card, .review-card { font-size: 0.9rem; }
-            .review-name { font-size: 1rem; }
+
+        /* Адаптация для маленьких экранов */
+        @media (max-width: 600px) {
+            .content {
+                padding: 1rem 1rem 3rem;
+            }
+            .container {
+                padding: 1rem;
+                margin-bottom: 1.2rem;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            .buttons-group {
+                gap: 0.8rem;
+            }
+            .neon-btn {
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
@@ -370,7 +399,7 @@
             </video>
         </div>
         <div class="video-caption">
-            <i class="fas fa-headphones"></i> Нажмите на видео ▶️ для воспроизведения со звуком | Нажмите ⏸️ для паузы
+            <i class="fas fa-headphones"></i> Нажмите на видео ▶️ для воспроизведения со звуком
         </div>
     </div>
 
@@ -382,21 +411,19 @@
         <div class="team-grid" id="teamList"></div>
     </div>
 
-    <!-- ОТЗЫВЫ (НОВЫЙ БЛОК) -->
+    <!-- Отзывы -->
     <div class="container">
         <div class="section-title">
             <i class="fas fa-star" style="margin-right: 12px; color: gold;"></i> Отзывы наших зрителей
         </div>
-        <div class="reviews-grid" id="reviewsList">
-            <!-- Отзывы будут вставлены через JS -->
-        </div>
+        <div class="reviews-grid" id="reviewsList"></div>
     </div>
 
     <!-- Кнопки -->
     <div class="buttons-group">
         <a href="https://t.me/livelingo" target="_blank" class="neon-btn"><i class="fab fa-telegram-plane"></i> Наш Telegram канал</a>
         <a href="https://t.me/Livelingomanager_bot" target="_blank" class="neon-btn"><i class="fab fa-telegram"></i> Telegram менеджер</a>
-        <a href="https://t.me/gitalivewp" target="_blank" class="neon-btn"><i class="fas fa-ticket-alt"></i> Билеты</a>
+        <a href="https://t.megitalivewp" target="_blank" class="neon-btn"><i class="fas fa-ticket-alt"></i> Билеты</a>
     </div>
 
     <!-- Виджет -->
@@ -407,9 +434,9 @@
     <!-- Информация -->
     <div class="info-footer">
         <i class="fas fa-info-circle"></i> Информация
-        <div style="margin-top: 12px;">
+        <div style="margin-top: 10px;">
             Сайт создан благодаря <strong>@MrFeast_Official</strong> 
-            <i class="fas fa-code"></i> | LiveLingo — Roblox концерты
+            <i class="fas fa-code"></i> | LiveLingo — неон Roblox концерты
         </div>
     </div>
 </div>
@@ -440,7 +467,7 @@
         }
     }
     
-    // Список команды (обновленный по вашему скриншоту)
+    // Список команды
     const teamMembers = [
         "@Moonslsl Владелец студии", "@KAT3R14KA Дизайнер", "@L1MONCH1K27K Звуковойрежиссёр",
         "@Slaygirl06 Танцор", "@ninarey Дизайнер/Танцор", "@V4mP_V4mP Светорежиссёр",
@@ -463,38 +490,13 @@
         });
     }
     
-    // ОТЗЫВЫ (данные из вашего сообщения)
+    // Отзывы
     const reviewsData = [
-        {
-            name: "𝓵𝓲𝓼𝓪𝓿𝓮𝓽𝓪",
-            id: "#ID_2109552561",
-            lang: "ru",
-            text: "это было очень ПРИКОЛЬНО, ТАКИЕ ЭМОЦИИ БЫЛИ ЭТО ПРЯМ ВООБЩЕ, МНЕ ОЧЕНЬ ПОНРАВИЛОСЬ❤️❤️"
-        },
-        {
-            name: "Паровоз⇈к🚂🔌",
-            id: "#ID_5712077823",
-            lang: "ru",
-            text: "На концерте было очень круто и красиво! Думаю, там все сделали фотки, потому что пройти мимо таких красивых мест невозможно ^^"
-        },
-        {
-            name: "Žjenia",
-            id: "#ID_863572324",
-            lang: "be",
-            text: "Привет , был на концерте , это было безумно круто сделано , мне очень понравилось как работала камера на Лизу , также была очень хорошая запись звука , мне очень понравилось наличие какие-то стихов, нерелизнутых треков и ее разговоров , все эти треки и стихи я знал и по этому было очень приятно их услышать , ощущение будто ты реально на концерте а не просто музыку включил, мне не понравилось что Лиза писала текст в чат и иногда он мешал , на камере постоянно было над головой у нее … поэтому лучше как будто без этого и так все знают текст )) ,в целом я в приятном шоке какие крутые бывают концерты в роблоксе тем более моего любимого исполнителя , честно думал это будет хуже , но вы сделали все безумно круто !!!! Спасибо большое !!!"
-        },
-        {
-            name: "💤💤",
-            id: "#ID_5121513084",
-            lang: "ru",
-            text: "здравствуйте!! мой максимально честный отзыв по концерту 2 мая: \n\nвсё прошло просто замечательно :) признаться честно: было страшно,думала, будет как в прошлый раз,но я рада,что все обошлось! \nочень порадовала организованность в этот раз: очень красиво оформленная карта,а также замечательные актеры. возможность сфотографироваться с командой и отдельно с монеточкой после концерта тоже очень порадовала🥹 \nединственное,могу выделить один момент,было бы здорово, если бы вы его рассмотрели: \nпевица бóльшую часть времени пела вперед песни. может быть случайность,лаги или её так попросили. в любом случае,если это возможно убрать/минимизировать,то будет просто супер!! \nбольше претензий нет. спасибо огромное за этот концерт,как я уже писала в чате,я будто побывала с настоящей монеточкой и на настоящем концерте! очень классная атмосфера,желаю других таких же успешных концертов с огромной поддержкой от зрителей ❤️"
-        },
-        {
-            name: "lovika",
-            id: "#ID_5758991764",
-            lang: "ru",
-            text: "Здравствуйте,я была на концерте 2 мая,мне очень понравилось,было классно,атмосферу точно удалось передать!Карта очень классная!!!💘💘💘Спасибо большое!)))"
-        }
+        { name: "𝓵𝓲𝓼𝓪𝓿𝓮𝓽𝓪", id: "#ID_2109552561", lang: "ru", text: "это было очень ПРИКОЛЬНО, ТАКИЕ ЭМОЦИИ БЫЛИ ЭТО ПРЯМ ВООБЩЕ, МНЕ ОЧЕНЬ ПОНРАВИЛОСЬ❤️❤️" },
+        { name: "Паровоз⇈к🚂🔌", id: "#ID_5712077823", lang: "ru", text: "На концерте было очень круто и красиво! Думаю, там все сделали фотки, потому что пройти мимо таких красивых мест невозможно ^^" },
+        { name: "Žjenia", id: "#ID_863572324", lang: "be", text: "Привет, был на концерте, это было безумно круто сделано! Ощущение, будто ты реально на концерте, а не просто музыку включил. Вы сделали всё безумно круто! Спасибо большое!!!" },
+        { name: "💤💤", id: "#ID_5121513084", lang: "ru", text: "Всё прошло просто замечательно! Очень красиво оформленная карта, замечательные актеры. Спасибо огромное за этот концерт, я будто побывала на настоящем концерте! ❤️" },
+        { name: "lovika", id: "#ID_5758991764", lang: "ru", text: "Здравствуйте, я была на концерте, мне очень понравилось, было классно, атмосферу точно удалось передать! Карта очень классная! 💘 Спасибо большое!" }
     ];
     
     const reviewsContainer = document.getElementById('reviewsList');
@@ -541,6 +543,7 @@
         });
     }
     
+    // Запуск анимации кругов
     window.addEventListener('load', initNeonCircles);
     window.addEventListener('resize', initNeonCircles);
 </script>
