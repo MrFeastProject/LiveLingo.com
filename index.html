@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>LiveLingo | Неон Roblox Концерты</title>
+    <title>LiveLingo | Roblox Концерты</title>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -187,6 +187,79 @@
             border-color: cyan;
             box-shadow: 0 0 20px cyan;
         }
+
+        /* Стили для отзывов */
+        .reviews-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .review-card {
+            background: #0a1428aa;
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 1.5rem;
+            border-left: 8px solid #0af;
+            border-right: 1px solid #0af;
+            border-top: 1px solid #0af;
+            border-bottom: 1px solid #0af;
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .review-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 0 25px #0af;
+            border-left: 8px solid cyan;
+        }
+        
+        .review-header {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #0af;
+        }
+        
+        .review-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0af;
+            text-shadow: 0 0 4px cyan;
+            word-break: break-all;
+        }
+        
+        .review-id {
+            font-size: 0.8rem;
+            color: #7ec8ff;
+            background: #0a1a28;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+        
+        .review-lang {
+            font-size: 0.8rem;
+            background: #1e3a5f;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+        
+        .review-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #e0f2fe;
+            margin-top: 0.8rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .review-text i {
+            color: #0af;
+            margin-right: 6px;
+        }
         
         .buttons-group {
             display: flex;
@@ -264,7 +337,8 @@
         @media (max-width: 700px) {
             .content { padding: 1rem; }
             .neon-btn { font-size: 1rem; padding: 8px 20px; }
-            .team-card { font-size: 0.9rem; }
+            .team-card, .review-card { font-size: 0.9rem; }
+            .review-name { font-size: 1rem; }
         }
     </style>
 </head>
@@ -306,6 +380,16 @@
             <i class="fas fa-users"></i> Наша команда
         </div>
         <div class="team-grid" id="teamList"></div>
+    </div>
+
+    <!-- ОТЗЫВЫ (НОВЫЙ БЛОК) -->
+    <div class="container">
+        <div class="section-title">
+            <i class="fas fa-star" style="margin-right: 12px; color: gold;"></i> Отзывы наших зрителей
+        </div>
+        <div class="reviews-grid" id="reviewsList">
+            <!-- Отзывы будут вставлены через JS -->
+        </div>
     </div>
 
     <!-- Кнопки -->
@@ -356,14 +440,14 @@
         }
     }
     
-    // Список команды
+    // Список команды (обновленный по вашему скриншоту)
     const teamMembers = [
-        "@Moonslsl Владелец студии", "@KAT3R14KA Дизайнер", "@L1M0NCH1K27K Звуковойрежиссёр",
+        "@Moonslsl Владелец студии", "@KAT3R14KA Дизайнер", "@L1MONCH1K27K Звуковойрежиссёр",
         "@Slaygirl06 Танцор", "@ninarey Дизайнер/Танцор", "@V4mP_V4mP Светорежиссёр",
         "@Arsenchikz Создатель скинов/Noize mc", "@Mashabibisya Танцор", "@masha_PIKMI223 Админ/Танцор",
-        "@B1nshko Танцор", "@CoffeeMC_2018 Танцор", "@GuchiiGuchii99 Артист/Танцор",
-        "@Sashlko Оператор", "@MrFeast_Official Скриптер/АнтиРейдер", "@mqvsh Артист",
-        "@evi4kawaaa Админ ТГК", "@gitalivewp Светорежиссёр"
+        "@B1nshko Танцор", "@CoffeeMC_2018 Танцор", "@GuchiGuchi99 Артист/Танцор",
+        "@Sashiko Оператор", "@MrFeast_Official Скриптер/АнтиРейдер", "@mqvsh Артист",
+        "@vei4kawaaa Админ ТГК", "@gitalivewp Светорежиссёр"
     ];
     
     const teamContainer = document.getElementById('teamList');
@@ -379,6 +463,59 @@
         });
     }
     
+    // ОТЗЫВЫ (данные из вашего сообщения)
+    const reviewsData = [
+        {
+            name: "𝓵𝓲𝓼𝓪𝓿𝓮𝓽𝓪",
+            id: "#ID_2109552561",
+            lang: "ru",
+            text: "это было очень ПРИКОЛЬНО, ТАКИЕ ЭМОЦИИ БЫЛИ ЭТО ПРЯМ ВООБЩЕ, МНЕ ОЧЕНЬ ПОНРАВИЛОСЬ❤️❤️"
+        },
+        {
+            name: "Паровоз⇈к🚂🔌",
+            id: "#ID_5712077823",
+            lang: "ru",
+            text: "На концерте было очень круто и красиво! Думаю, там все сделали фотки, потому что пройти мимо таких красивых мест невозможно ^^"
+        },
+        {
+            name: "Žjenia",
+            id: "#ID_863572324",
+            lang: "be",
+            text: "Привет , был на концерте , это было безумно круто сделано , мне очень понравилось как работала камера на Лизу , также была очень хорошая запись звука , мне очень понравилось наличие какие-то стихов, нерелизнутых треков и ее разговоров , все эти треки и стихи я знал и по этому было очень приятно их услышать , ощущение будто ты реально на концерте а не просто музыку включил, мне не понравилось что Лиза писала текст в чат и иногда он мешал , на камере постоянно было над головой у нее … поэтому лучше как будто без этого и так все знают текст )) ,в целом я в приятном шоке какие крутые бывают концерты в роблоксе тем более моего любимого исполнителя , честно думал это будет хуже , но вы сделали все безумно круто !!!! Спасибо большое !!!"
+        },
+        {
+            name: "💤💤",
+            id: "#ID_5121513084",
+            lang: "ru",
+            text: "здравствуйте!! мой максимально честный отзыв по концерту 2 мая: \n\nвсё прошло просто замечательно :) признаться честно: было страшно,думала, будет как в прошлый раз,но я рада,что все обошлось! \nочень порадовала организованность в этот раз: очень красиво оформленная карта,а также замечательные актеры. возможность сфотографироваться с командой и отдельно с монеточкой после концерта тоже очень порадовала🥹 \nединственное,могу выделить один момент,было бы здорово, если бы вы его рассмотрели: \nпевица бóльшую часть времени пела вперед песни. может быть случайность,лаги или её так попросили. в любом случае,если это возможно убрать/минимизировать,то будет просто супер!! \nбольше претензий нет. спасибо огромное за этот концерт,как я уже писала в чате,я будто побывала с настоящей монеточкой и на настоящем концерте! очень классная атмосфера,желаю других таких же успешных концертов с огромной поддержкой от зрителей ❤️"
+        },
+        {
+            name: "lovika",
+            id: "#ID_5758991764",
+            lang: "ru",
+            text: "Здравствуйте,я была на концерте 2 мая,мне очень понравилось,было классно,атмосферу точно удалось передать!Карта очень классная!!!💘💘💘Спасибо большое!)))"
+        }
+    ];
+    
+    const reviewsContainer = document.getElementById('reviewsList');
+    if (reviewsContainer) {
+        reviewsData.forEach(review => {
+            const reviewDiv = document.createElement('div');
+            reviewDiv.className = 'review-card';
+            reviewDiv.innerHTML = `
+                <div class="review-header">
+                    <span class="review-name"><i class="fas fa-user-astronaut"></i> ${review.name}</span>
+                    <span class="review-id"><i class="fas fa-hashtag"></i> ${review.id}</span>
+                    <span class="review-lang"><i class="fas fa-globe"></i> ${review.lang}</span>
+                </div>
+                <div class="review-text">
+                    <i class="fas fa-quote-left"></i> ${review.text.replace(/\n/g, '<br>')}
+                </div>
+            `;
+            reviewsContainer.appendChild(reviewDiv);
+        });
+    }
+    
     // Видео плеер
     const video = document.getElementById('neonConcertVideo');
     if (video) {
@@ -388,7 +525,6 @@
                 try {
                     await video.play();
                 } catch(err) {
-                    console.log("Автовоспроизведение заблокировано");
                     video.play();
                 }
             } else {
